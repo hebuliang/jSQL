@@ -132,23 +132,33 @@
 		*/
 		
 		total: function(scope) {
-		    var rs = 0, _tmp;
-			
-			for(var _key in this._currentDB) {
-				if(this._currentDB.hasOwnProperty(_key)) {
-					_tmp = scope === '*' ? 
-						this._currentDB[_key] : 
-						typeof(scope) === 'function' ? 
-							scope.call(this, this._currentDB[_key], _key) === true ? true : undefined : 
-							this._deep(this._currentDB[_key], scope);
-					
-					if(typeof(_tmp) !== 'undefined') {
-						rs++;
-					}
-				}
-			}
-			
-            return rs;
+		   var rs = 0, _tmp;
+		     
+                   for(var _key in this._currentDB) {
+        	    	_tmp = scope === '*' ? this_currentDB[_key]:
+        	    	(function(data, key){	    					    							    				 					    				
+        	    		var _tmp = data, key = key.split('.');
+        	    				
+        	    		if(this._isArray(_tmp)){					
+        	    		    for(var j=0; j<_tmp.length; j++) {
+        	    			data = this._deep(_tmp[j], key.join('.'));
+        	    			if(typeof data !== 'undefined')
+        				    rs++;   						
+        	    		    }
+        	    		} else {
+        	    		    var len = key.length;
+        	    		    for(var i=0; i<len; i++) {	 
+        		    		_tmp = _tmp[key[i]];	    							    					
+        		    		if(typeof _tmp !== 'undefined' && this._isArray(_tmp)) {	    						    							    									    						    						
+        		    		    arguments.callee.call(this, _tmp, key.splice(i+1).join('.'));
+        		    		} else if(i <=len || (typeof _tmp !== 'undefined' && typeof _tmp[key[len-1]] !== 'undefined')){			    							    						
+        		    		    rs++;
+        		    		}
+        	    		    }
+        	    		}
+        	    	}).call(this, this._currentDB[_key], scope);
+        	    }		
+                    return rs;
 		},
 
 		/**
