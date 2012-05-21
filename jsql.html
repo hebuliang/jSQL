@@ -149,13 +149,16 @@
 				steps : {
 					data: [{
 						"data" : "1089",
-						"name" : "日本"
+						"name" : "日本",
+						"level": 0
 					}, {
 						"data" : "1111",
-						"name" : "韩国"
+						"name" : "韩国",
+						"level": 0
 					}, {
 						"data" : "1133",
-						"name" : "泰国"
+						"name" : "泰国",
+						"level": 0
 					}]
 				}
 			},
@@ -163,18 +166,22 @@
 				steps : {
 					data: [{
 						"data" : "1904",
-						"name" : "西班牙"
+						"name" : "西班牙",
+						"level": 0
 					}, {
 						"data" : "1882",
-						"name" : "瑞士"
+						"name" : "瑞士",
+						"level": 0
 					}, {
 						"data" : "1860",
-						"name" : "意大利"
+						"name" : "意大利",
+						"level": 0
 					}]
 				}
 			}
 		}).use('struct');
-		db.select('steps.data').orderby('data', 'asc').findAll();
+		// db.select('steps.data').orderby('data', 'asc').findAll();
+		db.total('steps.data.level');
 	</script>
 </body>
 </html>
